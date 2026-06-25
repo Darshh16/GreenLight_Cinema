@@ -1,0 +1,13 @@
+# Virtual Environments
+venv/
+env/
+.env
+
+# Databases & Stores
+*.duckdb
+*.sqlite3
+chromadb_store/
+
+# Python Cache
+__pycache__/
+*.pyc
