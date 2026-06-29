@@ -75,7 +75,7 @@ def refiner_node(state: GraphState) -> dict:
         llm = ChatOllama(
             model=OLLAMA_MODEL,
             base_url=OLLAMA_BASE_URL,
-            temperature=0.6,
+            temperature=0.3,
             num_predict=4000,
             num_ctx=8192,
             top_p=0.8,

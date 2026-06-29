@@ -362,7 +362,7 @@ if current_page == "Studio":
     st.markdown("<h3 style='margin-top:0; margin-bottom: 20px; color: #F2EAE0;'>Production Parameters</h3>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns([1, 2, 1])
     with c1:
-        genre = st.selectbox("Genre", ["Action", "Sci-Fi", "Horror", "Comedy", "Drama", "Romance", "Crime", "Fantasy"])
+        genre = st.selectbox("Genre", ["Action", "Science Fiction", "Horror", "Comedy", "Drama", "Romance", "Crime", "Fantasy"])
     with c2:
         user_prompt = st.text_area("Creative Prompt (Optional)", placeholder="e.g. A retired hitman whose dog gets kidnapped...", height=68)
     with c3:
