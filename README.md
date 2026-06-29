@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎬 Greenlight Cinema
+#  Greenlight Cinema
 
 ### AI-Powered Movie Synopsis Generation with Market Intelligence
 
@@ -72,16 +72,16 @@ TMDB + MovieLens (33M+ ratings)
 
 ## Core Features
 
-### 📊 Historical Data Analytics
+###  Historical Data Analytics
 Queries 77,000+ TMDB films and 33M+ MovieLens ratings via DuckDB to surface real commercial patterns — genre ROI by budget tier, seasonal release windows, high-value director/actor combinations, and audience rating trends. All analytics use only films with genuine reported budgets and revenues, not imputed values.
 
-### ⚡ Dynamic Market Constraints
+###  Dynamic Market Constraints
 Automatically generates JSON constraint objects from the analytics data, tuned to the user's chosen genre and budget tier. A $10M horror film gets different constraints than a $150M action blockbuster — different target ROI, different seasonal fit, different casting guidance.
 
-### 🎭 Advanced RAG Pipeline
+###  Advanced RAG Pipeline
 Uses ChromaDB and `all-MiniLM-L6-v2` sentence embeddings to store 20,000+ scene-level chunks from 100 real screenplays. At generation time, the system retrieves the 3 most semantically similar scenes to the user's prompt, giving the Writer Agent concrete stylistic and structural reference material — not just instructions.
 
-### 🤖 Self-Correcting Multi-Agent Workflow
+###  Self-Correcting Multi-Agent Workflow
 Four specialized agents, each with a distinct accountability:
 
 | Agent | Responsibility | Output |
@@ -93,7 +93,7 @@ Four specialized agents, each with a distinct accountability:
 
 The Writer → Critic → Refiner loop runs up to 3 times until the score exceeds 0.7, then hands off to Producer.
 
-### 🎬 Streamlit Dashboard
+###  Streamlit Dashboard
 Real-time polling dashboard with market constraint visualization, agent progress tracking, synopsis display with audio narration (Web Speech API), critic evaluation scorecard, and producer budget breakdown — all in a dark cinematic UI.
 
 ---
