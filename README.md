@@ -86,7 +86,10 @@ greenlight-cinema/
 │   └── app.py
 ├── scripts/
 │   ├── setup_data.py               # Full data setup
-│   └── run_health_check.py         # Health verification
+│   ├── run_health_check.py         # Health verification
+│   ├── rag_pipeline.py             # RAG pipeline for downloading and ingesting scripts
+│   └── run_ingest.py               # Targeted ChromaDB ingestion script
+├── scrape_imsdb.py                 # Scraper for IMSDb screenplays
 ├── requirements.txt
 ├── .env.example
 └── README.md
