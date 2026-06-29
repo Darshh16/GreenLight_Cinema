@@ -24,6 +24,8 @@ class GraphState(TypedDict):
     synopsis: str                 # Current synopsis text
     critique: dict                # Latest critic evaluation
     score: float                  # Current composite score (0.0 - 1.0)
+    budget_breakdown: dict        # Producer's budget breakdown
+    risk_score: float             # Producer's risk assessment (0.0 - 1.0)
 
     # ── Loop Control ─────────────────────────────────────────────────────────
     iteration: int                # Current iteration number

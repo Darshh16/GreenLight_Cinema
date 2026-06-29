@@ -23,6 +23,7 @@ from greenlight.agents.state import GraphState
 from greenlight.agents.writer import writer_node
 from greenlight.agents.critic import critic_node
 from greenlight.agents.refiner import refiner_node
+from greenlight.agents.producer import producer_node
 
 log = logging.getLogger("greenlight.agents.graph")
 
@@ -35,16 +36,16 @@ def _should_continue(state: GraphState) -> str:
     status = state.get("status", "running")
 
     if status == "failed":
-        log.info(f"Workflow ending: status=failed")
+        log.info(f"Workflow ending early: status=failed")
         return "end"
 
     if score >= TARGET_SCORE:
-        log.info(f"Workflow ending: score {score:.3f} >= {TARGET_SCORE}")
-        return "end"
+        log.info(f"Workflow transitioning to producer: score {score:.3f} >= {TARGET_SCORE}")
+        return "producer"
 
     if iteration >= max_iter:
-        log.info(f"Workflow ending: iteration {iteration} >= max {max_iter}")
-        return "end"
+        log.info(f"Workflow transitioning to producer: iteration {iteration} >= max {max_iter}")
+        return "producer"
 
     log.info(f"Workflow continuing: score {score:.3f} < {TARGET_SCORE}, "
              f"iteration {iteration} < {max_iter}")
@@ -111,6 +112,7 @@ def build_graph() -> StateGraph:
     workflow.add_node("writer", writer_node)
     workflow.add_node("critic", critic_node)
     workflow.add_node("refiner", refiner_node)
+    workflow.add_node("producer", producer_node)
 
     workflow.set_entry_point("prepare")
     workflow.add_edge("prepare", "writer")
@@ -119,9 +121,10 @@ def build_graph() -> StateGraph:
     workflow.add_conditional_edges(
         "critic",
         _should_continue,
-        {"refine": "refiner", "end": END},
+        {"refine": "refiner", "producer": "producer", "end": END},
     )
     workflow.add_edge("refiner", "critic")
+    workflow.add_edge("producer", END)
 
     return workflow
 
@@ -152,6 +155,8 @@ def generate_synopsis(
         "synopsis": "",
         "critique": {},
         "score": 0.0,
+        "budget_breakdown": {},
+        "risk_score": 0.0,
         "iteration": 0,
         "max_iterations": max_iterations or MAX_ITERATIONS,
         "history": [],

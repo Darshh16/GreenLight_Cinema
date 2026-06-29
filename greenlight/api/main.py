@@ -62,6 +62,8 @@ class GenerationResponse(BaseModel):
     iterations: int
     critique: dict
     constraints: dict
+    budget_breakdown: dict
+    risk_score: float
 
 class SimplifyRequest(BaseModel):
     synopsis: str
@@ -92,6 +94,8 @@ async def api_generate(req: GenerationRequest):
             iterations=result.get("iteration", 0),
             critique=result.get("critique", {}),
             constraints=result.get("constraints", {}),
+            budget_breakdown=result.get("budget_breakdown", {}),
+            risk_score=result.get("risk_score", 0.0),
         )
     except Exception as e:
         log.error(f"Generation failed: {e}")

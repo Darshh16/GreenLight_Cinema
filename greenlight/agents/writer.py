@@ -66,7 +66,17 @@ STRICT RULES:
 13. CRITICAL MARKET CONSTRAINTS: You MUST strictly integrate ALL provided MARKET CONSTRAINTS (e.g. seasonal release windows, trending talent archetypes, themes). Explicitly weave these elements into the story. Failure to include them will result in immediate rejection.
 14. CRITICAL: Do NOT use real-world names, celebrities, or existing film titles. Generate 100% fictional names.
 
-OUTPUT FORMAT: First, you MUST output a <think> block where you briefly outline the 3 acts, explicitly verify cause-and-effect logic, confirm physical continuity, and strictly track character states (who is alive, injured, or dead). Then close the block with </think>. Immediately after, start your story generation with a "Setting and Asset Tracker" at the very top (e.g., [Setting: Washington Cabin] [Assets: .38 Revolver, Stolen Briefcase]). After that, write ONLY the synopsis as flowing prose. No titles. No headers. No act labels. No meta-commentary. Just the tracker followed by the story."""
+OUTPUT FORMAT: First, use a <think> block to explicitly verify cause-and-effect physical logic across all 3 acts. Map out character states (alive/dead/injured) for each act. (Aim for 200-400 words). Then close it with </think> and write the synopsis.
+CRITICAL: To maintain continuity, you MUST start EACH of the 3 Acts with an explicit tracker before the prose. 
+Example:
+[Act 1 Tracker]
+Setting: NYC Penthouse
+Characters: Kai (Alive, unhurt), Leo (Alive, unhurt)
+Assets: .38 Revolver (loaded)
+[End Tracker]
+(Act 1 prose goes here...)
+[Act 2 Tracker] ... etc.
+Do not use other headers. Do not use meta-commentary."""
 
 WRITER_HUMAN_PROMPT = """GENRE: {genre}
 BUDGET TIER: {budget_tier}
@@ -92,7 +102,7 @@ def writer_node(state: GraphState) -> dict:
             model=OLLAMA_MODEL,
             base_url=OLLAMA_BASE_URL,
             temperature=0.7,
-            num_predict=2000,
+            num_predict=4000,
             num_ctx=8192,
             top_p=0.85,
         )
