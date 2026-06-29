@@ -1,19 +1,19 @@
-# 🎬 Greenlight Cinema
+# Greenlight Cinema
 
 **AI-Powered Movie Synopsis Generation with Market Intelligence**
 
-Greenlight Cinema combines historical movie performance analytics with agentic AI workflows to generate commercially-aware movie synopses. It analyzes TMDB and MovieLens datasets, extracts commercial insights, and uses a multi-agent system (Writer → Critic → Refiner) to generate, evaluate, and refine market-aware movie synopses.
+Greenlight Cinema combines historical movie performance analytics with agentic AI workflows to generate commercially-aware movie synopses. It analyzes TMDB and MovieLens datasets, extracts commercial insights, and uses a multi-agent system (Writer -> Critic -> Refiner -> Producer) to generate, evaluate, refine, and financially assess market-aware movie synopses.
 
 ## Architecture
 
-```
-TMDB + MovieLens → DuckDB → Analytics Engine → Constraint Engine
-                                                      ↓
-ChromaDB ← Sentence Transformers ← Movie Overviews   ↓
-     ↓                                                ↓
-    RAG → LangGraph (Writer → Critic → Refiner) ← Ollama (qwen3:4b)
-                        ↓
-                    FastAPI → Streamlit Dashboard
+```text
+TMDB + MovieLens -> DuckDB -> Analytics Engine -> Constraint Engine
+                                                      |
+ChromaDB <- Sentence Transformers <- Movie Overviews  |
+     |                                                |
+    RAG -> LangGraph (Writer -> Critic -> Refiner -> Producer) <- Ollama (qwen3:4b)
+                        |
+                    FastAPI -> Streamlit Dashboard
 ```
 
 ## Quick Start
@@ -49,12 +49,12 @@ python scripts/run_health_check.py
 
 ## Project Structure
 
-```
+```text
 greenlight-cinema/
 ├── data/                           # Raw CSV datasets
 │   ├── tmdb.csv                    # TMDB movie metadata (638 MB)
 │   ├── credits.csv                 # Cast & crew (190 MB)
-│   ├── links.csv                   # MovieLens ↔ TMDB mapping (2 MB)
+│   ├── links.csv                   # MovieLens <-> TMDB mapping (2 MB)
 │   ├── movies.csv                  # MovieLens movies (4 MB)
 │   ├── ratings.csv                 # 33M+ ratings (934 MB)
 │   └── tags.csv                    # User tags (85 MB)
@@ -74,6 +74,7 @@ greenlight-cinema/
 │   │   ├── writer.py               # Synopsis writer agent
 │   │   ├── critic.py               # Evaluation critic agent
 │   │   ├── refiner.py              # Targeted refinement agent
+│   │   ├── producer.py             # Studio Producer agent (budget & risk scoring)
 │   │   └── graph.py                # LangGraph workflow
 │   ├── validation/                 # Constraint validation
 │   │   └── validator.py            # Validation engine

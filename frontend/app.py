@@ -635,6 +635,45 @@ if current_page == "Studio":
                 for sug in sugs:
                     st.markdown(f"- {sug}")
 
+        # Producer Report
+        risk = res.get("risk_score", 0.0)
+        budget_brk = res.get("budget_breakdown", {})
+        
+        # Format budget breakdown
+        budget_html = ""
+        for k, v in budget_brk.items():
+            budget_html += f"""<div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+<span style="color: #6B7280;">{k}</span>
+<span style="color: {t['text_main']}; font-family: 'JetBrains Mono';">{v}%</span>
+</div>
+<div style="background: rgba(255,255,255,0.05); height: 6px; border-radius: 3px; margin-bottom: 15px;">
+<div style="background: {t['accent_primary']}; height: 100%; width: {v}%; border-radius: 3px;"></div>
+</div>"""
+
+        risk_color = "#00E5A0" if risk < 0.4 else ("#D4AF37" if risk < 0.7 else "#FF4D6D")
+        risk_label = "Low Risk" if risk < 0.4 else ("Medium Risk" if risk < 0.7 else "High Risk")
+
+        st.markdown(f"""
+<div class="glass-card" style="margin-top: 20px;">
+<h3 style="margin-top:0; margin-bottom: 20px;">Producer Report</h3>
+<div style="display: flex; gap: 40px;">
+<div style="flex: 1; border-right: 1px solid rgba(255,255,255,0.1); padding-right: 40px;">
+<h4 style="margin-top:0; color: #6B7280;">Estimated Budget Breakdown</h4>
+{budget_html}
+</div>
+<div style="flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+<h4 style="margin-top:0; color: #6B7280;">Greenlight Risk Assessment</h4>
+<div style="font-size: 64px; font-family: 'JetBrains Mono'; font-weight: bold; color: {risk_color};">
+{risk * 100:.0f}%
+</div>
+<div style="background: rgba(255,255,255,0.05); padding: 8px 20px; border-radius: 20px; color: {risk_color}; border: 1px solid {risk_color}; margin-top: 10px;">
+{risk_label}
+</div>
+</div>
+</div>
+</div>
+        """, unsafe_allow_html=True)
+
 elif current_page == "History":
     st.markdown("<h2 class='hero-title' style='margin-bottom:20px; border:none; animation:none;'>Generation History</h2>", unsafe_allow_html=True)
     if not st.session_state.history:

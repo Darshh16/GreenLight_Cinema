@@ -43,7 +43,9 @@ RULES:
 
 CRITICAL INSTRUCTION: You MUST maintain the {word_count}-word target (at least 400 words). DO NOT shorten the synopsis from its original length. Expanding the text is encouraged to fix constraints.
 
-OUTPUT FORMAT: First, you MUST output a <think> block where you briefly analyze the critic's feedback and plan your specific changes. Then close the block with </think>. Immediately after, start your generation with a "Setting and Asset Tracker" at the very top (e.g., [Setting: Washington Cabin] [Assets: .38 Revolver, Stolen Briefcase]). After that, output ONLY the improved synopsis text. No explanations. No commentary. No headers. Just the tracker followed by the refined story."""
+OUTPUT FORMAT: First, use a <think> block to plan your changes and explicitly verify cause-and-effect physical logic to ensure you don't break continuity. (Aim for 200-400 words). Then close it with </think>.
+CRITICAL: To maintain continuity, you MUST preserve the explicit [Act X Tracker] blocks before each act's prose, updating the character states (Alive/Injured/Dead) and assets if your refinements change them.
+Output ONLY the improved synopsis text with its trackers. No explanations. No commentary. No other headers."""
 
 REFINER_HUMAN_PROMPT = """GENRE: {genre}
 
@@ -74,7 +76,7 @@ def refiner_node(state: GraphState) -> dict:
             model=OLLAMA_MODEL,
             base_url=OLLAMA_BASE_URL,
             temperature=0.6,
-            num_predict=2000,
+            num_predict=4000,
             num_ctx=8192,
             top_p=0.8,
         )
