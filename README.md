@@ -86,7 +86,7 @@ Four specialized agents, each with a distinct accountability:
 
 | Agent | Responsibility | Output |
 |---|---|---|
-| **Writer** | Drafts a 3-act synopsis enforcing physical logic and character continuity | 150-word synopsis |
+| **Writer** | Drafts a 3-act synopsis enforcing physical logic and character continuity | 300-400 word synopsis |
 | **Critic** | Scores genre compliance, seasonal fit, ROI alignment, and narrative quality | Score 0–1 + issues list |
 | **Refiner** | Surgically rewrites only the failing sections without breaking story continuity | Improved synopsis |
 | **Producer** | Calculates realistic department-level budget breakdown and final risk score | Budget table + Greenlight Risk Score |
