@@ -9,10 +9,9 @@ import logging
 import json
 import re
 
-from langchain_ollama import ChatOllama
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from greenlight.config import OLLAMA_BASE_URL, OLLAMA_MODEL
+from greenlight.config import get_llm
 from greenlight.agents.state import GraphState
 
 log = logging.getLogger("greenlight.agents.producer")
@@ -51,15 +50,13 @@ Provide the budget breakdown and risk score JSON now:"""
 
 def producer_node(state: GraphState) -> dict:
     """Producer agent — generates budget breakdown and risk score."""
+    if state.get("status") == "failed":
+        return {}
+        
     log.info(f"Producer agent: evaluating final synopsis")
 
     try:
-        llm = ChatOllama(
-            model=OLLAMA_MODEL,
-            base_url=OLLAMA_BASE_URL,
-            temperature=0.3,
-            num_predict=4000,
-        )
+        llm = get_llm(temperature=0.4)
 
         constraints_str = json.dumps(state.get("constraints", {}), indent=2)
         budget_tier = state.get("constraints", {}).get("target_budget_tier", "Unknown")

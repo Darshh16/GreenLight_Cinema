@@ -14,10 +14,9 @@ Key improvements from v1:2
 import logging
 import re
 
-from langchain_ollama import ChatOllama
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from greenlight.config import OLLAMA_BASE_URL, OLLAMA_MODEL, SYNOPSIS_WORDS
+from greenlight.config import get_llm, SYNOPSIS_WORDS
 from greenlight.agents.state import GraphState
 from greenlight.agents.writer import _clean_think_tags
 
@@ -67,19 +66,15 @@ Rewrite the synopsis fixing ALL failed constraints while preserving ALL passed c
 
 
 def refiner_node(state: GraphState) -> dict:
-    """Refiner agent — makes targeted improvements based on critique."""
-    iteration = state["iteration"] + 1
+    """Refiner agent — iterates on synopsis based on critique."""
+    if state.get("status") == "failed":
+        return {}
+
+    iteration = state.get("iteration", 0) + 1
     log.info(f"Refiner agent: improving synopsis (iteration {iteration})")
 
     try:
-        llm = ChatOllama(
-            model=OLLAMA_MODEL,
-            base_url=OLLAMA_BASE_URL,
-            temperature=0.3,
-            num_predict=4000,
-            num_ctx=8192,
-            top_p=0.8,
-        )
+        llm = get_llm(temperature=0.3)
 
         critique = state.get("critique", {})
         failed_constraints = critique.get("failed_constraints", ["No specific failures noted"])

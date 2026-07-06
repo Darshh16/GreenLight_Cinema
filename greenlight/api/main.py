@@ -88,6 +88,9 @@ async def api_generate(req: GenerationRequest):
             max_iterations=req.max_iterations,
         )
 
+        if result.get("status") == "failed":
+            raise Exception(result.get("error", "Unknown pipeline error occurred."))
+
         return GenerationResponse(
             synopsis=result.get("synopsis", ""),
             score=result.get("score", 0.0),

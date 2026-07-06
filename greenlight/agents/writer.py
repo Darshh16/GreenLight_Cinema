@@ -14,10 +14,9 @@ import logging
 import json
 import re
 
-from langchain_ollama import ChatOllama
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from greenlight.config import OLLAMA_BASE_URL, OLLAMA_MODEL, SYNOPSIS_WORDS
+from greenlight.config import get_llm, SYNOPSIS_WORDS
 from greenlight.agents.state import GraphState
 
 def _clean_think_tags(text: str) -> str:
@@ -95,17 +94,13 @@ Write a vivid, compelling {word_count}-word {genre} movie synopsis now. Remember
 
 def writer_node(state: GraphState) -> dict:
     """Writer agent — generates a rich, 400-word synopsis."""
+    if state.get("status") == "failed":
+        return {}
+
     log.info(f"Writer agent: generating {state['genre']} synopsis (iteration {state['iteration']})")
 
     try:
-        llm = ChatOllama(
-            model=OLLAMA_MODEL,
-            base_url=OLLAMA_BASE_URL,
-            temperature=0.3,
-            num_predict=4000,
-            num_ctx=8192,
-            top_p=0.85,
-        )
+        llm = get_llm(temperature=0.3)
 
         # Format constraints
         constraints_text = state.get("constraints", {})

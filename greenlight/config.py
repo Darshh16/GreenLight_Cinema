@@ -18,9 +18,35 @@ SCRIPTS_DIR  = PROJECT_ROOT / "data" / "scripts"   # synthetic scripts for RAG
 # ── DuckDB ───────────────────────────────────────────────────────────────────
 DUCKDB_THREADS = int(os.getenv("DUCKDB_THREADS", "4"))
 
-# ── Ollama ───────────────────────────────────────────────────────────────────
+# ── LLM Configuration ──────────────────────────────────────────────────────────
+LLM_PROVIDER    = os.getenv("LLM_PROVIDER", "ollama").lower()
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_MODEL    = os.getenv("OLLAMA_MODEL", "qwen3:4b")
+GROQ_API_KEY    = os.getenv("GROQ_API_KEY", "")
+GROQ_MODEL      = os.getenv("GROQ_MODEL", "llama-3.3-70b-versatile")
+
+def get_llm(temperature: float = 0.3):
+    """Factory function to instantiate the correct LLM based on environment."""
+    if LLM_PROVIDER == "groq":
+        from langchain_groq import ChatGroq
+        if not GROQ_API_KEY:
+            raise ValueError("GROQ_API_KEY is required when LLM_PROVIDER is 'groq'")
+        return ChatGroq(
+            api_key=GROQ_API_KEY,
+            model=GROQ_MODEL,
+            temperature=temperature,
+            max_tokens=4000,
+        )
+    else:
+        from langchain_ollama import ChatOllama
+        return ChatOllama(
+            model=OLLAMA_MODEL,
+            base_url=OLLAMA_BASE_URL,
+            temperature=temperature,
+            num_predict=4000,
+            num_ctx=8192,
+            top_p=0.85,
+        )
 
 # ── Embedding ────────────────────────────────────────────────────────────────
 EMBEDDING_MODEL = os.getenv("EMBEDDING_MODEL", "all-MiniLM-L6-v2")

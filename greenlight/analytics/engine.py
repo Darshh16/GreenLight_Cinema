@@ -142,7 +142,7 @@ class AnalyticsEngine:
         FROM (
             SELECT TRIM(UNNEST(string_split(directors, '|'))) as director, roi, revenue, vote_average
             FROM movies 
-            WHERE roi_is_real = true {genre_filter} AND directors IS NOT NULL AND release_year >= 2010 AND vote_count > 50 AND TRIM(directors) != ''
+            WHERE roi_is_real = true {genre_filter} AND directors IS NOT NULL AND release_year >= 2020 AND vote_count > 50 AND TRIM(directors) != ''
         )
         WHERE director != ''
         GROUP BY 1 
@@ -166,7 +166,7 @@ class AnalyticsEngine:
         FROM (
             SELECT TRIM(UNNEST(string_split(top_cast, '|'))) as actor, roi, revenue, vote_average
             FROM movies 
-            WHERE roi_is_real = true {genre_filter} AND top_cast IS NOT NULL AND release_year >= 2010 AND vote_count > 50 AND TRIM(top_cast) != ''
+            WHERE roi_is_real = true {genre_filter} AND top_cast IS NOT NULL AND release_year >= 2020 AND vote_count > 50 AND TRIM(top_cast) != ''
         )
         WHERE actor != ''
         GROUP BY 1 

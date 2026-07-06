@@ -16,10 +16,9 @@ import logging
 import json
 import re
 
-from langchain_ollama import ChatOllama
 from langchain_core.messages import SystemMessage, HumanMessage
 
-from greenlight.config import OLLAMA_BASE_URL, OLLAMA_MODEL
+from greenlight.config import get_llm
 from greenlight.agents.state import GraphState
 
 log = logging.getLogger("greenlight.agents.critic")
@@ -130,17 +129,13 @@ def _parse_critic_response(response_text: str) -> dict:
 
 def critic_node(state: GraphState) -> dict:
     """Critic agent — evaluates synopsis with detailed rubric."""
+    if state.get("status") == "failed":
+        return {}
+
     log.info(f"Critic agent: evaluating synopsis (iteration {state['iteration']})")
 
     try:
-        llm = ChatOllama(
-            model=OLLAMA_MODEL,
-            base_url=OLLAMA_BASE_URL,
-            temperature=0.4,
-            format="json",
-            num_ctx=8192,
-            top_p=0.9,
-        )
+        llm = get_llm(temperature=0.1)
         constraints_text = state.get("constraints", {})
         if isinstance(constraints_text, dict):
             if "prompt_text" in constraints_text:
@@ -209,5 +204,6 @@ def critic_node(state: GraphState) -> dict:
                 "suggestions": []
             },
             "score": 0.5,
-            "status": "running",
+            "status": "failed",
+            "error": f"Critic error: {str(e)}"
         }
