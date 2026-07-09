@@ -350,5 +350,5 @@ Data sources: [TMDB](https://www.themoviedb.org/) · [MovieLens](https://grouple
 ---
 
 <div align="center">
-  <sub>Built with LangGraph · DuckDB · ChromaDB · Ollama · FastAPI · Streamlit</sub>
+  <sub>Built by Darsh and with LangGraph · DuckDB · ChromaDB · Ollama · FastAPI · Streamlit</sub>
 </div>
