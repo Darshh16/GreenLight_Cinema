@@ -12,7 +12,6 @@
 [![LangGraph](https://img.shields.io/badge/LangGraph-Agent_Workflow-7B61FF?style=flat-square)](https://github.com/langchain-ai/langgraph)
 [![DuckDB](https://img.shields.io/badge/DuckDB-Analytics-FFC832?style=flat-square)](https://duckdb.org)
 [![ChromaDB](https://img.shields.io/badge/ChromaDB-Vector_Store-orange?style=flat-square)](https://www.trychroma.com)
-[![Ollama](https://img.shields.io/badge/Ollama-qwen3:4b-black?style=flat-square)](https://ollama.ai)
 
 </div>
 
