@@ -8,9 +8,12 @@ API endpoints for:
 
 import logging
 from contextlib import asynccontextmanager
+import os
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
 from greenlight.agents.core import generate_synopsis
@@ -184,3 +187,24 @@ async def health_check():
         "rag_docs": rag.get_collection_count() if rag.is_healthy() else 0,
         "target_score": TARGET_SCORE
     }
+
+# ── Frontend Serving (Must be at the bottom) ────────────────────────────────
+
+# Mount the static assets (CSS, JS, images)
+dist_dir = os.path.join(os.path.dirname(__file__), "..", "..", "web", "dist")
+if os.path.exists(dist_dir):
+    # Mount assets folder explicitly so it doesn't conflict with root paths
+    if os.path.exists(os.path.join(dist_dir, "assets")):
+        app.mount("/assets", StaticFiles(directory=os.path.join(dist_dir, "assets")), name="assets")
+        
+    # Catch-all route to serve index.html for client-side routing
+    @app.get("/{full_path:path}")
+    async def serve_frontend(full_path: str):
+        # Serve exact file if it exists (e.g. favicon.ico, images in public)
+        file_path = os.path.join(dist_dir, full_path)
+        if os.path.isfile(file_path):
+            return FileResponse(file_path)
+        # Otherwise fallback to index.html for React Router
+        return FileResponse(os.path.join(dist_dir, "index.html"))
+else:
+    log.warning(f"Frontend dist directory not found at {dist_dir}. Make sure to build the React app.")

@@ -1,0 +1,9 @@
+.git
+.gitignore
+venv/
+__pycache__/
+*.pyc
+.env
+chromadb_store/
+web/node_modules/
+web/dist/
